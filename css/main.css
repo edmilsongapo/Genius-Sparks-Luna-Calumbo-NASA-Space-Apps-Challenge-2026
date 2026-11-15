@@ -1,0 +1,23 @@
+:root{--bg:#070a12;--pn:#111726;--tx:#ece7da;--mu:#a3acba;--red:#d6122f;--gd:#f9d200;--ln:#2a3550;box-sizing:border-box}
+@media(prefers-color-scheme:light){:root{--bg:#eef0f4;--pn:#fff;--tx:#151a24;--mu:#4d5766;--red:#b30d26;--gd:#7a5c00;--ln:#c9cfdb}}
+*{box-sizing:inherit}body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.55 "Trebuchet MS",system-ui,sans-serif}
+h1,h2,h3{font-family:Georgia,"Times New Roman",serif;line-height:1.1;margin:.2em 0}
+main{max-width:960px;margin:auto;padding:22px 18px 60px}
+.top{display:flex;justify-content:space-between;align-items:center;gap:10px;border-bottom:3px solid var(--red);padding-bottom:10px;margin-bottom:22px}
+.top a{color:var(--tx);font-weight:700}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px}
+.card{display:block;background:var(--pn);border:1px solid var(--ln);border-left:5px solid var(--red);padding:16px;color:inherit;text-decoration:none;border-radius:6px}
+a.card:hover,a.card:focus-visible{border-left-color:var(--gd)}
+.btn{display:inline-block;background:var(--red);color:#fff;border:0;padding:12px 22px;font:700 16px inherit;border-radius:4px;cursor:pointer;text-decoration:none}
+.btn:hover{background:#a00e24}.btn.alt{background:none;border:2px solid var(--gd);color:var(--gd)}
+:focus-visible{outline:3px solid var(--gd);outline-offset:2px}
+.demo{display:inline-block;background:var(--gd);color:#111;font-size:12px;font-weight:700;padding:2px 8px;border-radius:3px}
+.mu{color:var(--mu)}label{display:block;margin-top:14px;font-weight:700}input[type=range]{width:100%}
+.out{background:var(--pn);border:1px solid var(--ln);padding:14px;margin-top:16px;border-radius:6px}
+.ok{color:#3fbf7a}.bad{color:#ff6b6b}
+@media(prefers-reduced-motion:reduce){*{animation:none!important}}
+.bgimg{background:radial-gradient(ellipse at 80% 0,#1b2a55,var(--bg) 60%)}
+.who{position:fixed;right:12px;bottom:12px;z-index:50;display:flex;align-items:flex-end;gap:8px;max-width:min(340px,90vw)}
+.who .bub{background:var(--pn);border:2px solid var(--gd);border-radius:12px 12px 2px 12px;padding:10px 12px;font-size:14px;box-shadow:0 4px 18px #0008}
+.who button.av{background:none;border:0;cursor:pointer;padding:0}
+.chip{display:inline-block;border:2px solid var(--gd);color:var(--gd);border-radius:99px;padding:6px 14px;margin:4px 6px 0 0;background:none;font:700 14px inherit;cursor:pointer}.chip[aria-pressed=true]{background:var(--gd);color:#111}

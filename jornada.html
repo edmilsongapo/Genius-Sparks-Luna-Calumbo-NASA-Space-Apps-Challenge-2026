@@ -1,0 +1,288 @@
+<!doctype html><html lang="pt"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Jornada Terra → Lua · Luna Calumbo</title><link rel="stylesheet" href="css/main.css">
+<style>body{overflow:hidden;overscroll-behavior:none}#w{position:fixed;inset:0}
+.pl{background:#070a12d9;border:1px solid var(--ln);border-left:4px solid var(--red);padding:8px 12px;border-radius:6px;color:#ece7da;font-size:14px}.pl a{color:var(--gd);font-weight:700;pointer-events:auto}
+#top{position:fixed;top:calc(10px + env(safe-area-inset-top,0px));left:12px;right:12px;display:flex;justify-content:space-between;gap:10px;z-index:5;pointer-events:none;flex-wrap:wrap}#steps{display:flex;gap:6px;flex-wrap:wrap;font-size:12px}#steps i{font-style:normal;opacity:.45;padding:1px 6px;border-bottom:2px solid transparent}#steps i.on{opacity:1;border-color:var(--gd);color:var(--gd);font-weight:700}#steps i.ok{opacity:.8}
+#tel{position:fixed;left:12px;top:calc(74px + env(safe-area-inset-top,0px));z-index:5;font:12px ui-monospace,Menlo,monospace;display:none}
+#cap{position:fixed;left:0;right:0;top:28%;text-align:center;color:#fff;font-weight:700;font-size:clamp(16px,3vw,26px);text-shadow:0 2px 10px #000;z-index:5;pointer-events:none;opacity:0;transition:opacity .5s}#big{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;font:900 min(34vw,260px)/1 Georgia,serif;color:#fff;text-shadow:0 0 40px var(--red);z-index:5;pointer-events:none;opacity:0}
+#dlg{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(16px + env(safe-area-inset-bottom,0px));width:min(94vw,660px);z-index:7;display:none;font-size:16px;cursor:pointer}#dlg.in{animation:fi .35s}@keyframes fi{from{opacity:0;transform:translate(-50%,8px)}}#dn{display:block;font:700 12px ui-monospace,monospace;letter-spacing:.08em;text-transform:uppercase}#dlg small{display:block;color:var(--mu);font-size:11px;margin-top:4px}
+.box{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);z-index:9;width:min(92vw,400px);display:none;font-size:15px}.box input{width:100%;accent-color:var(--gd)}#fin{top:auto;bottom:calc(16px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);width:min(96vw,640px)}#fin .btn,.box .btn{margin:4px 4px 0 0;padding:9px 14px;font-size:14px}.box a.btn{color:#fff}.ok{color:#5fd38d}.no{color:#ff7a6a}
+#ytmusic{width:min(100%,420px);height:180px;margin:8px auto 0;display:none}#ytmusic iframe{width:100%;height:100%;border:0;border-radius:6px}#fade{position:fixed;inset:0;background:#000;opacity:0;pointer-events:none;z-index:8;transition:opacity .7s}.pl a.btn{color:#fff}.note{font-size:11px;color:var(--mu);margin:6px 0 0}
+#spd a{display:inline-block;padding:1px 7px;border-radius:4px;text-decoration:none;margin:0 1px}#spd a.on{background:var(--gd);color:#000}
+#scan{position:fixed;right:12px;top:calc(96px + env(safe-area-inset-top,0px));width:min(310px,58vw);z-index:6;display:none;font:11px/1.5 ui-monospace,Menlo,monospace;border-left-color:#5fd38d}#scan b{display:block;color:var(--gd);font-size:12px}#scan #sz{display:block;margin-bottom:3px;color:#fff;font-weight:700}#scan .r{display:flex;flex-wrap:wrap;justify-content:space-between;gap:0 8px}#scan small{color:var(--mu);font-size:10px}#scan .v{margin-top:5px;padding-top:4px;border-top:1px solid var(--ln);font-weight:700}
+#ntf{position:fixed;left:12px;top:calc(96px + env(safe-area-inset-top,0px));width:min(300px,58vw);z-index:6;display:none;font-size:13px;animation:fi2 .3s}#ntf b{display:block;font:700 11px ui-monospace,monospace;letter-spacing:.06em;color:var(--gd);text-transform:uppercase;margin-bottom:2px}#ntf em{display:block;font-style:normal;font-weight:700}#ntf.g{border-left-color:#5fd38d}#ntf.r{border-left-color:#ff7a6a}@keyframes fi2{from{opacity:0;transform:translateY(-6px)}}
+#pz{position:fixed;left:50%;top:38%;transform:translateX(-50%);z-index:6;display:none;pointer-events:none;font-weight:700;text-align:center}</style></head><body>
+<div id="w"></div>
+<div id="top"><div class="pl" id="steps"></div><div class="pl"><span id="spd" aria-label="Velocidade da demonstração"><a href="#" data-s="0" id="bPz" title="Pausar (P)">Pausa</a><a href="#" data-s=".5">×0,5</a><a href="#" data-s="1" class="on">×1</a><a href="#" data-s="2">×2</a></span> · <a href="mission.html">Mission Control</a></div></div>
+<div class="pl" id="tel"></div><div id="cap" aria-live="polite"></div><div id="big"></div>
+<div class="pl" id="scan" role="status" aria-live="polite"><b>📡 Robô → 🛰 Nave</b><span id="sz"></span><div id="sl"></div><div class="v" id="sv"></div><small>Dados simulados, para ensino.</small></div><div class="pl" id="ntf" role="alert"></div><div class="pl" id="pz">PAUSADO · carrega em P ou em «Retomar»</div>
+<div class="pl" id="dlg" role="status"><b id="dn"></b><span id="dt"></span><small>Toca aqui ou carrega em Espaço para avançar</small></div>
+<div class="pl box" id="hg"><b>Abastecimento</b><p style="margin:.4em 0">Combustível total: <b id="fv"></b> t</p><input id="fs" type="range" min="40" max="85" value="60" aria-label="Combustível em toneladas"><p id="fm" aria-live="polite" style="margin:.5em 0"></p><button class="btn" id="fgo">Abastecer e lançar</button><p class="note">Valores simplificados para ensino. A janela ideal usada no jogo 3D é 73–76 t.</p></div>
+<div class="pl box" id="fin"><b>Missão cumprida!</b> Dança e ouve música:<br><button class="btn" data-m="kelly">Kelly Stress — Felicidade (Sebém)</button><button class="btn" data-m="lambas">Os Lambas — Comboio II</button><button class="btn" data-m="samba">Samba</button><button class="btn" data-m="hino">Hino Nacional</button><button class="btn alt" data-m="stop">Parar</button><br><a class="btn" href="explorar.html">Explorar a Lua →</a><button class="btn alt" id="rs">Repetir</button><div id="ytmusic" aria-label="Leitor de Os Lambas — Comboio II"></div><p class="note" id="mn">O Kuduro “Felicidade (Sebém)”, de Kelly Stress, toca o ficheiro assets/audio/kuduro.mp3. “Comboio II”, dos Os Lambas, é reproduzida através do YouTube. O Hino toca o ficheiro assets/audio/hino.mp3, que deves colocar tu.</p></div>
+<div id="fade"></div>
+<script src="js/three.min.js"></script>
+<script>
+/* ===== Configuração editável ===== */
+const DIRECTOR_NOME='Director do GGPEN'; // põe aqui o nome do director (ex.: 'Dr. Nome Apelido')
+const FUEL_MIN=73,FUEL_MAX=76;
+/* ===== Base ===== */
+const $=i=>document.getElementById(i),PI=Math.PI;
+const R=new THREE.WebGLRenderer({antialias:true});R.setPixelRatio(Math.min(devicePixelRatio,2));R.shadowMap.enabled=true;$('w').appendChild(R.domElement);
+const S=new THREE.Scene(),C=new THREE.PerspectiveCamera(55,1,.1,4000);
+function rs(){R.setSize(innerWidth,innerHeight);C.aspect=innerWidth/innerHeight;C.updateProjectionMatrix()}addEventListener('resize',rs);rs();
+const sun=new THREE.DirectionalLight(0xfff4e0,1.05);sun.position.set(50,90,60);sun.castShadow=true;sun.shadow.mapSize.set(1024,1024);Object.assign(sun.shadow.camera,{left:-45,right:45,top:60,bottom:-30,far:300});S.add(sun);
+const amb=new THREE.HemisphereLight(0xbcd8ff,0x5a4a35,.5);S.add(amb);
+const M=(c,r=.6,m=0)=>new THREE.MeshStandardMaterial({color:c,roughness:r,metalness:m}),W=M(0xf2f2f2),RED=M(0xd6122f),YEL=M(0xf9d200,.4,.3),BLK=M(0x151515);
+const add=(g,m,x,y,z,p)=>{const o=new THREE.Mesh(g,m);o.position.set(x,y,z);o.castShadow=o.receiveShadow=true;(p||S).add(o);return o};
+const grp=(x,y,z,p)=>{const g=new THREE.Group();g.position.set(x,y,z);(p||S).add(g);return g};
+const ease=u=>u<.5?2*u*u:1-Math.pow(-2*u+2,2)/2,cv=(w,h,f)=>{const c=document.createElement('canvas');c.width=w;c.height=h;f(c.getContext('2d'),w,h);return c};
+function label(t,sub,col){const c=cv(256,64,(x,w,h)=>{x.fillStyle='#000a';x.fillRect(0,0,w,h);x.fillStyle=col||'#f9d200';x.font='bold 22px sans-serif';x.textAlign='center';x.fillText(t,w/2,28,240);x.fillStyle='#fff';x.font='15px sans-serif';x.fillText(sub||'',w/2,50)});const s=new THREE.Sprite(new THREE.SpriteMaterial({map:new THREE.CanvasTexture(c),depthTest:false}));s.scale.set(3,.75,1);return s}
+const flagTex=new THREE.CanvasTexture(cv(128,80,x=>{x.fillStyle='#d6122f';x.fillRect(0,0,128,40);x.fillStyle='#111';x.fillRect(0,40,128,40);x.strokeStyle='#f9d200';x.lineWidth=5;x.beginPath();x.arc(64,40,17,PI*.9,PI*2.1);x.stroke();x.fillStyle='#f9d200';x.beginPath();for(let i=0;i<10;i++){const a=i*PI/5-PI/2,r=i%2?5:11;x.lineTo(64+Math.cos(a)*r,40+Math.sin(a)*r)}x.fill()}));
+const FM=new THREE.MeshStandardMaterial({map:flagTex,side:2,roughness:.8});
+/* céu, estrelas */
+const SKY=new THREE.Color(),C1=new THREE.Color(0x7ec8ff),C2=new THREE.Color(0x000008);
+const sg=new THREE.BufferGeometry(),sp=new Float32Array(3600);for(let i=0;i<sp.length;i+=3){const a=Math.random()*6.283,b=Math.acos(2*Math.random()-1);sp.set([2500*Math.sin(b)*Math.cos(a),2500*Math.cos(b),2500*Math.sin(b)*Math.sin(a)],i)}sg.setAttribute('position',new THREE.BufferAttribute(sp,3));
+const stars=new THREE.Points(sg,new THREE.PointsMaterial({color:0xffffff,size:2,sizeAttenuation:false,transparent:true,opacity:0}));S.add(stars);
+function sky(a){a=Math.max(0,Math.min(1,a));SKY.copy(C1).lerp(C2,a);S.background=SKY;if(S.fog)S.fog.color.copy(SKY);stars.material.opacity=Math.max(0,(a-.5)*2);amb.intensity=.5-.3*a}
+/* ===== Pessoas ===== */
+function person(o){const g=grp(0,0,0),u={},mk=(geo,m,x,y,z,p)=>add(geo,m,x,y,z,p||g);
+mk(new THREE.BoxGeometry(.75,.95,.45),M(o.suit),0,1.35,0);mk(new THREE.BoxGeometry(.77,.14,.47),M(o.trim),0,.95,0);
+mk(new THREE.SphereGeometry(.3,20,16),M(o.skin,.8),0,2.1,0);mk(new THREE.SphereGeometry(.31,16,12,0,6.3,0,1.3),BLK,0,2.12,0);
+function lim(sx,py,len,nm,col){const p=grp(sx,py,0,g);mk(new THREE.CylinderGeometry(.14,.12,len,12),M(col),0,-len/2,0,p);u[nm]=p}
+lim(-.52,1.7,.75,'armL',o.suit);lim(.52,1.7,.75,'armR',o.suit);lim(-.2,.85,.85,'legL',o.legs);lim(.2,.85,.85,'legR',o.legs);
+if(o.cape){const cp=new THREE.Mesh(new THREE.PlaneGeometry(.9,1.3),FM);cp.geometry.translate(0,-.65,0);cp.position.set(0,1.8,-.3);cp.castShadow=true;g.add(cp);u.cape=cp}
+if(o.helmet){const h=grp(.55,1.0,.3,g);mk(new THREE.SphereGeometry(.4,22,16),W,0,0,0,h);const v=mk(new THREE.SphereGeometry(.31,20,14),M(0x13224d,.15,.9),0,.02,.17,h);v.scale.set(1,.8,.6);u.helm=h}
+u.lp=new THREE.Vector3();g.userData=u;return g}
+const K=person({suit:0xf2f2f2,trim:0xd6122f,legs:0xcfcfcf,skin:0x6b4226,cape:1,helmet:1}),D=person({suit:0x1c2a4a,trim:0xf9d200,legs:0x14203a,skin:0x5a3820});
+const kt=label('Kiala','astronauta'),dt_=label(DIRECTOR_NOME,'GGPEN');kt.position.y=3;dt_.position.y=3;K.add(kt);D.add(dt_);
+function animP(p,dt,t,dance,beat){const u=p.userData,v=Math.hypot(p.position.x-u.lp.x,p.position.z-u.lp.z)/Math.max(dt,1e-3);u.lp.copy(p.position);const ph=(u.ph=(u.ph||0)+dt*Math.min(v,5)*2.2);
+['legL','legR','armL','armR'].forEach(k=>u[k].rotation.set(0,0,0));p.rotation.z=0;
+if(dance){const b=beat*PI*2;if(dance==='kuduro'){u.legL.rotation.x=Math.sin(b*2)*.9;u.legR.rotation.x=-Math.sin(b*2)*.9;u.armL.rotation.set(-2.4+Math.sin(b*2)*.6,0,.5);u.armR.rotation.set(-2.4-Math.sin(b*2)*.6,0,-.5);u.by=Math.abs(Math.sin(b))*.3}
+else if(dance==='samba'){p.rotation.z=Math.sin(b)*.1;u.legL.rotation.set(Math.sin(b)*.5,0,.15);u.legR.rotation.set(-Math.sin(b)*.5,0,-.15);u.armL.rotation.set(0,0,1.4+Math.sin(b*2)*.3);u.armR.rotation.set(0,0,-1.4-Math.sin(b*2)*.3);u.by=Math.abs(Math.sin(b))*.12}
+else{u.armR.rotation.set(-2.6,0,-.2);u.by=0}}
+else if(v>.3){u.legL.rotation.x=Math.sin(ph)*.8;u.legR.rotation.x=-Math.sin(ph)*.8;u.armL.rotation.x=-Math.sin(ph)*.6;u.armR.rotation.x=Math.sin(ph)*.6;u.by=0}
+else{u.armL.rotation.x=Math.sin(t*1.5)*.05;u.by=0;if(u.wave>0){u.wave-=dt;u.armR.rotation.set(0,0,-2.5+Math.sin(t*12)*.35)}}
+if(u.cape)u.cape.rotation.x=.12+Math.min(v,5)*.1+Math.sin(t*6)*.05}
+/* ===== Terra (Calumbo) ===== */
+const G=grp(0,0,0);G.add(Object.assign(new THREE.Mesh(new THREE.CircleGeometry(500,48).rotateX(-PI/2),M(0x7a8f4d,1)),{receiveShadow:true}));
+add(new THREE.CylinderGeometry(15,15,.2,40),M(0xb9a07a,1),0,.1,0,G);add(new THREE.CylinderGeometry(9,9,.6,36),M(0x8a8a88,.9),0,.3,0,G);
+for(let i=0;i<14;i++){const a=i*2.1,r=45+(i*37%120),b=grp(Math.cos(a)*r,0,Math.sin(a)*r-40,G);add(new THREE.CylinderGeometry(1.3,1.8,7,10),M(0x7b6246,1),0,3.5,0,b);for(let k=0;k<3;k++)add(new THREE.SphereGeometry(2.6,10,8),M(0x4f7a3a,1),(k-1)*2.4,7.6+k%2,0,b).scale.y=.45}
+const hang=add(new THREE.BoxGeometry(24,12,14),M(0xdedcd6,.8),-22,6,-14,G);add(new THREE.BoxGeometry(24.2,1.4,14.2),RED,-22,9,-14,G);add(new THREE.BoxGeometry(24.2,.5,14.2),YEL,-22,7.6,-14,G);
+const sign=label('CALUMBO','Plataforma de lançamento','#fff');sign.scale.set(9,2.2,1);sign.position.set(-22,14.5,-6);G.add(sign);
+const fp=grp(-12,0,18,G);add(new THREE.CylinderGeometry(.08,.08,9,8),W,0,4.5,0,fp);const fl=new THREE.Mesh(new THREE.PlaneGeometry(3,1.9),FM);fl.position.set(1.6,7.9,0);fp.add(fl);
+const gan=grp(6.2,.6,0,G);for(const [x,z] of [[-.9,-.9],[.9,-.9],[-.9,.9],[.9,.9]])add(new THREE.BoxGeometry(.3,38,.3),M(0xd6122f),x,19,z,gan);for(let y=3;y<38;y+=5)add(new THREE.BoxGeometry(2.1,.2,2.1),W,0,y,0,gan);
+S.fog=new THREE.Fog(0x7ec8ff,120,800);
+/* ===== Satélite, módulo lunar ===== */
+function satellite(){const s=grp(0,0,0),pn=[];add(new THREE.BoxGeometry(1.4,1.8,1.4),M(0xd9b24a,.3,.8),0,0,0,s);for(const sx of[-1,1]){const p=grp(sx*.7,0,0,s);const pl=add(new THREE.BoxGeometry(3.2,.06,1.3),M(0x1a2f6b,.3,.7),sx*1.6,0,0,p);p.userData.sx=sx;pn.push(p)}
+const dish=grp(0,.9,.2,s);add(new THREE.SphereGeometry(.6,14,10,0,6.3,0,1.2),W,0,.2,0,dish).rotation.x=-.2;s.userData={pn,dish};return s}
+function lander(){const l=grp(0,0,0),legs=[];add(new THREE.CylinderGeometry(1.2,1.5,3,20),W,0,1.5,0,l);add(new THREE.CylinderGeometry(1.52,1.52,.4,20),RED,0,.9,0,l);add(new THREE.CylinderGeometry(.5,.8,.9,12),M(0x444444,.4,.8),0,-.3,0,l);
+for(let i=0;i<4;i++){const a=i*PI/2,p=grp(Math.cos(a)*1.3,.4,Math.sin(a)*1.3,l);p.rotation.y=-a;const q=grp(0,0,0,p);add(new THREE.BoxGeometry(.18,2.6,.18),M(0xb0b0b0,.5,.6),0,-1.3,0,q);add(new THREE.BoxGeometry(.9,.1,.9),M(0xb0b0b0),0,-2.6,0,q);legs.push(q)}
+l.userData.legs=legs;return l}
+const setLegs=(l,o)=>l.userData.legs.forEach(q=>{q.rotation.z=-(1-o)*1.4;q.visible=o>.02});
+/* ===== Foguetão Calumbo-1 (base em y=0, comprimento ~36) ===== */
+const RK=grp(0,.6,0,G),pS1=grp(0,0,0,RK),UP=grp(0,0,0,RK),pS2=grp(0,0,0,UP),pLan=grp(0,0,0,UP),pFa=grp(0,0,0,UP);
+for(let i=0;i<4;i++){const a=i*PI/2;add(new THREE.CylinderGeometry(.35,.6,1.3,12),M(0x444444,.4,.8),Math.cos(a)*.9,.65,Math.sin(a)*.9,pS1)}
+add(new THREE.CylinderGeometry(1.8,1.8,13.8,28),W,0,8.1,0,pS1);add(new THREE.CylinderGeometry(1.82,1.82,1.2,28),RED,0,4,0,pS1);add(new THREE.CylinderGeometry(1.82,1.82,.5,28),YEL,0,5,0,pS1);add(new THREE.CylinderGeometry(1.82,1.82,1.5,28),BLK,0,13,0,pS1);
+for(let i=0;i<4;i++){const a=i*PI/2,f=add(new THREE.BoxGeometry(.2,3,1.8),RED,Math.cos(a)*2.3,2.2,Math.sin(a)*2.3,pS1);f.rotation.y=-a}
+add(new THREE.CylinderGeometry(1.6,1.8,7,28),BLK,0,18.9,0,pS2);add(new THREE.CylinderGeometry(1.62,1.62,.5,28),YEL,0,18,0,pS2);
+const LD1=lander();LD1.position.y=22.8;LD1.scale.setScalar(.9);pLan.add(LD1);setLegs(LD1,0);const SAT=satellite();SAT.position.set(0,27.6,0);SAT.userData.pn.forEach(p=>p.scale.x=.05);pLan.add(SAT);
+const fairM=new THREE.MeshStandardMaterial({color:0xf2f2f2,roughness:.5,transparent:true});add(new THREE.CylinderGeometry(1.75,1.75,9,28),fairM,0,26.9,0,pFa);add(new THREE.ConeGeometry(1.75,5,28),fairM,0,33.9,0,pFa);
+[pS1,pS2,pLan,pFa].forEach(p=>p.visible=false);
+const FL=new THREE.Mesh(new THREE.ConeGeometry(1.1,6,16).rotateX(PI),new THREE.MeshBasicMaterial({color:0xffa030,transparent:true,opacity:.85}));FL.visible=false;RK.add(FL);
+/* ===== Espaço ===== */
+const SP=grp(0,0,0);SP.visible=false;
+const eTex=new THREE.CanvasTexture(cv(1024,512,(x,w,h)=>{x.fillStyle='#1c52a8';x.fillRect(0,0,w,h);const P=(lo,la)=>[(lo+180)/360*w,(90-la)/180*h];
+x.fillStyle='#4f8f4a';x.beginPath();[[-17,15],[-16,21],[-10,29],[-6,35],[10,37],[11,33],[20,32],[32,31],[34,28],[38,18],[43,12],[51,12],[45,2],[40,-4],[40,-15],[35,-24],[32,-29],[27,-34],[20,-35],[18,-32],[12,-18],[13,-9],[9,-1],[9,4],[5,6],[-8,4],[-13,8]].forEach(([a,b],i)=>{const p=P(a,b);i?x.lineTo(...p):x.moveTo(...p)});x.fill();
+x.fillStyle='#c9b36a88';x.beginPath();const q=P(10,22);x.ellipse(q[0],q[1],45,22,0,0,7);x.fill();for(let i=0;i<70;i++){x.fillStyle='#ffffff88';x.beginPath();x.ellipse(Math.random()*w,Math.random()*h,14+Math.random()*40,3+Math.random()*7,0,0,7);x.fill()}}));
+const EM=new THREE.MeshStandardMaterial({map:eTex,roughness:.9,emissive:0xffffff,emissiveMap:eTex,emissiveIntensity:.45});const EA=add(new THREE.SphereGeometry(40,64,48),EM,0,0,0,SP);EA.rotation.y=-.9;add(new THREE.SphereGeometry(42,32,24),new THREE.MeshBasicMaterial({color:0x6fa8ff,transparent:true,opacity:.18,side:THREE.BackSide}),0,0,0,SP);
+{const th=(90+12)*PI/180,ph=(13+180)/360*PI*2,r=40.2,m=add(new THREE.SphereGeometry(.7,10,8),new THREE.MeshBasicMaterial({color:0xf9d200}),-r*Math.cos(ph)*Math.sin(th),r*Math.cos(th),r*Math.sin(ph)*Math.sin(th),EA);const lb=label('Angola','',null);lb.scale.set(14,3.5,1);lb.position.copy(m.position).multiplyScalar(1.12);EA.add(lb)}
+const mTex=new THREE.CanvasTexture(cv(512,256,(x,w,h)=>{x.fillStyle='#8f8e8a';x.fillRect(0,0,w,h);for(let i=0;i<2500;i++){const v=70+Math.random()*100|0;x.fillStyle=`rgba(${v},${v},${v-4},.4)`;x.fillRect(Math.random()*w,Math.random()*h,2+Math.random()*7,2+Math.random()*7)}for(let i=0;i<30;i++){x.fillStyle='#0002';x.beginPath();x.arc(Math.random()*w,Math.random()*h,3+Math.random()*10,0,7);x.fill()}}));mTex.wrapS=mTex.wrapT=THREE.RepeatWrapping;
+const MP=new THREE.Vector3(560,70,0),MO=add(new THREE.SphereGeometry(11,48,32),new THREE.MeshStandardMaterial({map:mTex,roughness:1,emissive:0x777777,emissiveMap:mTex,emissiveIntensity:.35}),MP.x,MP.y,MP.z,SP);
+/* ===== Superfície lunar ===== */
+const L=grp(0,0,0);L.visible=false;const gt=mTex.clone();gt.repeat.set(9,9);gt.needsUpdate=true;
+add(new THREE.CircleGeometry(400,48).rotateX(-PI/2),new THREE.MeshStandardMaterial({color:0xb8b6b0,map:gt,roughness:1}),0,0,0,L);
+for(let i=0;i<60;i++){const a=i*2.4,r=14+i*3.5%130;add(new THREE.DodecahedronGeometry(.5+i%5*.35,0),M(0x77756f,1),Math.cos(a)*r,.2,Math.sin(a)*r-10,L)}
+const EL=add(new THREE.SphereGeometry(5,32,24),EM,-60,48,-130,L);const LD=lander();L.add(LD);
+const fG=grp(0,0,0,L);fG.visible=false;add(new THREE.CylinderGeometry(.06,.06,5,8),W,0,2.5,0,fG);{const f=new THREE.Mesh(new THREE.PlaneGeometry(2.2,1.4),FM);f.position.set(1.1,4.3,0);fG.add(f)}
+const dust=add(new THREE.RingGeometry(1,2,32).rotateX(-PI/2),new THREE.MeshBasicMaterial({color:0xcfcac0,transparent:true,opacity:0,side:2}),0,.05,0,L);dust.castShadow=dust.receiveShadow=false;
+/* ===== Robô explorador, zonas candidatas e farol ===== */
+function robot(){const r=grp(0,0,0),u={wh:[]};
+add(new THREE.BoxGeometry(1.5,.5,2),W,0,.75,0,r);add(new THREE.BoxGeometry(1.53,.12,2.03),RED,0,.93,0,r);
+for(const x of[-.95,.95])for(const z of[-.75,0,.75]){const w=add(new THREE.CylinderGeometry(.38,.38,.3,14),BLK,x,.38,z,r);w.rotation.z=PI/2;u.wh.push(w)}
+add(new THREE.BoxGeometry(1.9,.06,1.1),M(0x1a2f6b,.3,.7),0,1.06,-.3,r);add(new THREE.CylinderGeometry(.07,.07,1,8),M(0x888888),0,1.5,.7,r);
+const h=grp(0,2.05,.7,r);add(new THREE.BoxGeometry(.7,.4,.45),YEL,0,0,0,h);add(new THREE.SphereGeometry(.14,10,8),M(0x13224d,.15,.9),0,0,.25,h);
+add(new THREE.SphereGeometry(.4,14,8,0,6.3,0,1.2),W,-.55,1.25,-.85,r).rotation.x=-.5;u.ant=grp(-.55,1.5,-.85,r);
+for(const sx of[-1,1]){const f=new THREE.Mesh(new THREE.PlaneGeometry(.7,.44),FM);f.position.set(sx*.77,.75,0);f.rotation.y=sx*PI/2;r.add(f)}
+const cone=new THREE.Mesh(new THREE.ConeGeometry(1.6,2.05,24,1,true),new THREE.MeshBasicMaterial({color:0x5fd38d,transparent:true,opacity:.22,side:2,depthWrite:false}));cone.position.y=-1.025;cone.visible=false;h.add(cone);
+const fl=new THREE.Mesh(new THREE.ConeGeometry(.5,2,10).rotateX(PI),new THREE.MeshBasicMaterial({color:0xffa030,transparent:true,opacity:.85}));fl.position.y=-.2;fl.visible=false;r.add(fl);
+u.head=h;u.cone=cone;u.fl=fl;r.userData=u;return r}
+const RB=robot();RB.visible=false;S.add(RB);
+/* zonas candidatas (dados simulados). A zona C fica na origem: é onde a nave aluna. */
+const ZN=[{id:'A',nome:'Zona A · planalto rochoso',x:-36,z:-16,y:3.6,r:14,v:[11.4,38,34,9,18,96,24,1]},{id:'B',nome:'Zona B · borda de cratera',x:30,z:-24,r:13,v:[9.1,6,52,23,7,31,22,0]},{id:'C',nome:'Zona C · planície lisa',x:0,z:0,r:12,v:[2.8,3,78,6,23,104,21,1]}];
+/* [nome, unidade, teste, resumo, limite] */
+const SENS=[['Inclinação','°',v=>v<=8,'inclinação','≤ 8°'],['Rochas >0,5 m',' /100 m²',v=>v<=10,'muitas rochas','≤ 10'],['Firmeza do solo',' kPa',v=>v>=40,'solo mole','≥ 40'],['Poeira (prof.)',' cm',v=>v<=15,'poeira funda','≤ 15'],['Altura do Sol','°',v=>v>=10,'pouca luz solar','≥ 10°'],['Temp. do solo',' °C',v=>v<=120,'calor excessivo','≤ 120'],['Radiação',' µSv/h',v=>v<=50,'radiação','≤ 50'],['Ligação à Terra','',v=>v===1,'sem ligação à Terra','']];
+ZN.forEach(z=>{const g=new THREE.Mesh(new THREE.RingGeometry(z.r-.4,z.r,64).rotateX(-PI/2),new THREE.MeshBasicMaterial({color:0xf9d200,transparent:true,opacity:.55,side:2}));g.position.set(z.x,.06,z.z);L.add(g);z.ring=g;const lb=label('Zona '+z.id,'',null);lb.scale.set(7,1.75,1);lb.position.set(z.x,(z.y||0)+7,z.z);lb.visible=false;L.add(lb);z.lab=lb});
+{const A=ZN[0],B=ZN[1],gm=new THREE.MeshStandardMaterial({color:0xb8b6b0,map:gt,roughness:1}),rk=M(0x6d6b66,1),ra=A.r-2;
+const mound=add(new THREE.SphereGeometry(ra,28,14),gm,A.x,0,A.z,L);mound.scale.y=.3;mound.castShadow=false;
+for(let i=0;i<10;i++){const a=PI*2/3+i*PI/9,d=4.5+(i*5.3%7),hh_=Math.sqrt(Math.max(0,1-(d/ra)**2))*ra*.3;add(new THREE.DodecahedronGeometry(.9+i%4*.45,0),rk,A.x+Math.cos(a)*d,hh_+.4,A.z+Math.sin(a)*d,L)}
+const rim=add(new THREE.TorusGeometry(B.r-2,1.6,10,40).rotateX(PI/2),gm,B.x,.35,B.z,L);rim.scale.y=.8;add(new THREE.CircleGeometry(B.r-3.4,40).rotateX(-PI/2),M(0x5d5b57,1),B.x,.05,B.z,L).castShadow=false}
+const BC=grp(-4,0,-2,L);BC.visible=false;add(new THREE.CylinderGeometry(.07,.07,5,8),W,0,2.5,0,BC);add(new THREE.CylinderGeometry(.4,.5,.3,12),M(0x444444),0,.15,0,BC);const BCL=add(new THREE.SphereGeometry(.22,12,10),new THREE.MeshBasicMaterial({color:0x5fd38d}),0,5.2,0,BC);
+const BR=new THREE.Mesh(new THREE.RingGeometry(3.7,4.1,48).rotateX(-PI/2),new THREE.MeshBasicMaterial({color:0x5fd38d,transparent:true,opacity:.8,side:2}));BR.position.set(0,.07,0);BR.visible=false;L.add(BR);
+const RG=new THREE.Mesh(new THREE.RingGeometry(.85,1,64).rotateX(-PI/2),new THREE.MeshBasicMaterial({color:0x5fd38d,transparent:true,opacity:0,side:2}));RG.position.y=.1;L.add(RG);
+const PS=new THREE.Mesh(new THREE.SphereGeometry(.35,10,8),new THREE.MeshBasicMaterial({color:0xf9d200}));PS.visible=false;L.add(PS);
+/* ===== Animação, câmara ===== */
+const TW=[],DB=[];let TS=1,camFn=()=>{},ck=3,tNow=0,MET=0,metOn=0;const KP=new THREE.Vector3(-2,3.2,25),KT=new THREE.Vector3(-5.5,2.2,14),LK=KT.clone();C.position.copy(KP);
+const tween=(d,f)=>new Promise(r=>TW.push({d,t:0,f,r})),wait=s=>tween(s,()=>{});
+const cam=(p,t)=>{KP.set(...p);KT.set(...t)};const snap=()=>{camFn(0);C.position.copy(KP);LK.copy(KT)};
+const fade=async v=>{$('fade').style.opacity=v;await wait(.8)};
+let capT;function cap(t){const c=$('cap');c.textContent=t;c.style.opacity=1;clearTimeout(capT);capT=setTimeout(()=>c.style.opacity=0,3200)}
+async function big(t){const b=$('big');b.textContent=t;b.style.opacity=1;b.style.transition='none';await tween(.9,u=>{b.style.opacity=1-u;b.style.transform=`scale(${1+u*.3})`})}
+let skipD=null;function say(who,txt,ms){return new Promise(r=>{const b=$('dlg');b.style.display='block';b.classList.remove('in');void b.offsetWidth;b.classList.add('in');$('dn').textContent=who;$('dn').style.color=who==='Kiala'?'var(--gd)':'#9cc3ff';$('dt').textContent=txt;let d=false;const f=()=>{if(d)return;d=true;skipD=null;r()};skipD=f;tween((ms||Math.max(3300,txt.length*58))/1000,u=>u>=1&&f())})}
+const hideD=()=>{$('dlg').style.display='none'};
+$('dlg').onclick=()=>skipD&&skipD();addEventListener('keydown',e=>{if((e.code==='Space'||e.code==='Enter')&&skipD){e.preventDefault();skipD()}if(e.code==='KeyG'&&fin)play('lambas')});
+let prevTS=1;
+function setTS(v){TS=v;if(v>0)prevTS=v;document.querySelectorAll('#spd a').forEach(a=>{const on=+a.dataset.s===v;a.classList.toggle('on',on);a.setAttribute('aria-pressed',on)});$('bPz').textContent=v===0?'Retomar':'Pausa';$('pz').style.display=v===0?'block':'none';if(kellyA){v===0?kellyA.pause():kellyA.play().catch(()=>{})}if(AC){v===0?AC.suspend():AC.resume()}}
+document.querySelectorAll('#spd a').forEach(a=>a.onclick=e=>{e.preventDefault();const v=+a.dataset.s;setTS(v===0&&TS===0?prevTS:v)});
+addEventListener('keydown',e=>{if(e.code==='KeyP'&&!e.repeat)setTS(TS===0?prevTS:0)});
+const STEPS=['Terra','Montagem','Lançamento','Rumo à Lua','Robô','ANGOSAT-2','Alunagem','Exploração'];$('steps').innerHTML=STEPS.map(s=>`<i>${s}</i>`).join('');
+function step(n){[...$('steps').children].forEach((e,i)=>e.className=i<n?'ok':i===n?'on':'')}
+const hh=s=>String(Math.floor(s/3600)).padStart(2,'0')+':'+String(Math.floor(s/60)%60).padStart(2,'0')+':'+String(Math.floor(s)%60).padStart(2,'0');
+const tel=(a,b)=>{const t=$('tel');t.style.display='block';t.innerHTML=`T+ ${hh(MET)} · ${a}<br>${b} <span style="opacity:.6">(simulado)</span>`};
+const nf=(n,d=0)=>n.toLocaleString('pt-PT',{minimumFractionDigits:d,maximumFractionDigits:d});
+/* ===== Música (Web Audio) ===== */
+let AC,MG,mus=null,hinoA=null,kellyA=null;const KELLY_BPM=135;const dance=k=>{K.userData.dance=k};
+function ac(){if(!AC){try{AC=new(window.AudioContext||window.webkitAudioContext)();MG=AC.createGain();MG.gain.value=.55;MG.connect(AC.destination)}catch(e){}}if(AC&&AC.state==='suspended')AC.resume();return AC}
+let NB;const nz=(t,d,ty,f,v)=>{if(!NB){NB=AC.createBuffer(1,AC.sampleRate,AC.sampleRate);const a=NB.getChannelData(0);for(let i=0;i<a.length;i++)a[i]=Math.random()*2-1}const s=AC.createBufferSource(),b=AC.createBiquadFilter(),g=AC.createGain();s.buffer=NB;b.type=ty;b.frequency.value=f;g.gain.setValueAtTime(v,t);g.gain.exponentialRampToValueAtTime(.001,t+d);s.connect(b);b.connect(g);g.connect(MG);s.start(t);s.stop(t+d+.02)};
+const tn=(t,f,d,ty,v,f2)=>{const o=AC.createOscillator(),g=AC.createGain();o.type=ty;o.frequency.setValueAtTime(f,t);if(f2)o.frequency.exponentialRampToValueAtTime(f2,t+d*.5);g.gain.setValueAtTime(v,t);g.gain.exponentialRampToValueAtTime(.001,t+d);o.connect(g);g.connect(MG);o.start(t);o.stop(t+d+.02)};
+const PT={samba:{bpm:100,f:(n,t)=>{if(n%8===4)tn(t,90,.35,'sine',.9,50);else if(n%8===0)tn(t,80,.25,'sine',.45,55);if([0,2,4,5,7,8,10,12,13,15].includes(n))nz(t,.05,'bandpass',3200,.35);nz(t,.04,'highpass',8000,n%2?.12:.22);if([2,6,10,14].includes(n))[196,246.9,293.7].forEach(f=>tn(t,f,.18,'triangle',.1))}}};
+function stopMus(){if(mus){clearInterval(mus.id);mus=null}if(hinoA){hinoA.pause();hinoA=null}if(kellyA){kellyA.pause();kellyA=null}const yp=$('ytmusic');yp.innerHTML='';yp.style.display='none';dance(null)}
+function play(k){if(TS===0)setTS(prevTS);stopMus();$('mn').textContent='';
+if(k==='stop')return;if(k==='kelly'){kellyA=new Audio('assets/audio/kuduro.mp3');kellyA.loop=true;kellyA.onerror=()=>{$('mn').textContent='Não encontrei assets/audio/kuduro.mp3. Confirma que o ficheiro está nessa pasta.';kellyA=null;dance(null)};kellyA.play().catch(()=>{});$('mn').textContent='A tocar: Kelly Stress — Felicidade (Sebém) "Kuduro". Usa o botão Parar para terminar.';dance('kuduro');return}if(k==='lambas'){const yp=$('ytmusic');yp.style.display='block';const f=document.createElement('iframe');f.src='https://www.youtube-nocookie.com/embed/iyLe5da1t0Q?autoplay=1&rel=0';f.title='Os Lambas — Comboio II';f.allow='autoplay; encrypted-media; picture-in-picture';f.allowFullscreen=true;yp.appendChild(f);$('mn').textContent='A tocar: Os Lambas — Comboio II. Usa o botão Parar para terminar.';dance('kuduro');return}if(!ac())return;if(k==='hino'){hinoA=new Audio('assets/audio/hino.mp3');hinoA.onerror=()=>{$('mn').textContent='Não encontrei assets/audio/hino.mp3. Coloca lá o ficheiro do Hino Nacional (Angola Avante) e tenta outra vez.';dance(null)};hinoA.play().catch(()=>{});dance('hino');return}
+const p=PT[k],sp=60/p.bpm/4;let n=0,t0=AC.currentTime+.1;const st=t0;mus={st,sp,id:setInterval(()=>{while(t0<AC.currentTime+.25){p.f(n%16,t0);n++;t0+=sp}},50)};dance(k)}
+document.querySelectorAll('[data-m]').forEach(b=>b.onclick=()=>play(b.dataset.m));
+/* ===== Ciclo de frames ===== */
+let last=performance.now(),fin=false;
+function frame(now){requestAnimationFrame(frame);const dt=Math.min(.05,(now-last)/1000);last=now;tNow+=dt*TS;const d2=dt*TS;if(metOn)MET+=d2;
+for(let i=TW.length-1;i>=0;i--){const w=TW[i];w.t+=d2;const u=Math.min(1,w.t/w.d);w.f(u);if(u>=1){TW.splice(i,1);w.r()}}
+for(let i=DB.length-1;i>=0;i--){const b=DB[i];b.o.position.addScaledVector(b.v,d2);b.o.rotation.x+=b.w*d2;b.o.rotation.z+=b.w*.6*d2;if(b.g)b.v.y-=b.g*d2;b.life-=d2;if(b.m)b.m.opacity=Math.max(0,Math.min(1,b.life/1.2));if(b.life<=0){b.o.parent&&b.o.parent.remove(b.o);DB.splice(i,1)}}
+let beat=0;if(kellyA&&K.userData.dance==='kuduro'){beat=kellyA.currentTime*KELLY_BPM/60}else if(mus&&AC){beat=(AC.currentTime-mus.st)/(mus.sp*4)}else if(K.userData.dance==='kuduro'){beat=now/1000*136/60}
+[K,D].forEach(p=>{if(p.visible){const dn=p===K?K.userData.dance:null;animP(p,dt,tNow,dn,beat);p.userData.yo=(dn?p.userData.by||0:0)}});
+if(K.userData.dance&&K.userData.dance!=='hino'&&fin){K.position.y=lg(K)+K.userData.yo}
+if(FL.visible){const f=FL.userData.s||1;FL.scale.set((.85+Math.random()*.3)*f,(.8+Math.random()*.5)*f,(.85+Math.random()*.3)*f)}
+if(RB.userData.fl.visible)RB.userData.fl.scale.set(.8+Math.random()*.4,.8+Math.random()*.6,.8+Math.random()*.4);if(BC.visible)BCL.visible=Math.sin(tNow*7)>0;
+camFn(dt);C.position.lerp(KP,1-Math.exp(-ck*dt));LK.lerp(KT,1-Math.exp(-ck*dt));C.lookAt(LK);R.render(S,C)}
+const lg=p=>L.visible?0:0;
+/* ===== Roteiro ===== */
+async function intro(){step(0);G.visible=true;sky(0);K.position.set(-3,0,14);K.rotation.y=-PI/2;D.position.set(-8,0,14);D.rotation.y=PI/2;K.userData.helm.position.set(.55,1,.3);K.userData.helm.scale.setScalar(.7);
+ck=2;cam([-2,3.2,25],[-5.5,2.2,14]);camFn=()=>{cam([-2+Math.sin(tNow*.2)*2,3.2,25],[-5.5,2.2,14])};
+await say(DIRECTOR_NOME,'Bom dia, Kiala. Bem-vinda ao GGPEN, o Gabinete de Gestão do Programa Espacial Nacional.');
+await say(DIRECTOR_NOME,'Hoje vamos levar Angola até à Lua. E levamos connosco o ANGOSAT-2.');
+await say('Kiala','Estou pronta, director! Por onde começamos?');
+await say(DIRECTOR_NOME,'Pelo capacete. No espaço não há ar para respirar, por isso o fato é a tua casa.');
+hideD();const h=K.userData.helm;await tween(1.8,u=>{const e=ease(u);h.position.set(.55*(1-e),1+1.1*e+Math.sin(u*PI)*.4,.3*(1-e));h.scale.setScalar(.7+.3*e)});cap('Capacete colocado');
+await say('Kiala','Capacete fechado. Viseira OK!',2600);
+await say(DIRECTOR_NOME,'Agora vem comigo à zona de montagem. Vamos construir a nave.')}
+async function montagem(){step(1);hideD();const walk=(p,x,z,s)=>{const a=p.position.clone(),b=new THREE.Vector3(x,0,z),r=Math.atan2(b.x-a.x,b.z-a.z);p.rotation.y=r;return tween(s,u=>p.position.lerpVectors(a,b,u))};
+camFn=()=>{cam([K.position.x+14,6,K.position.z+16],[K.position.x-3,3,K.position.z-6])};
+await Promise.all([walk(K,12,12,4.5),walk(D,8,13,4.8)]);K.rotation.y=-PI*.75;D.rotation.y=-PI*.7;
+camFn=()=>cam([30+Math.sin(tNow*.15)*5,16,36],[0,15,0]);ck=1.5;
+const put=async(p,y0=40)=>{p.visible=true;await tween(1.3,u=>{p.position.y=(1-ease(u))*y0})};
+await say(DIRECTOR_NOME,'Uma nave monta-se de baixo para cima. Primeiro, os motores e o 1.º estágio: dão o empurrão que nos tira do chão.');await put(pS1);cap('1.º estágio: motores e tanques');
+await say(DIRECTOR_NOME,'O 2.º estágio leva-nos da órbita da Terra até à Lua.');await put(pS2);cap('2.º estágio');
+await say(DIRECTOR_NOME,'No topo vai o módulo de alunagem, onde viajas, e o ANGOSAT-2, o nosso satélite.');await put(pLan);cap('Módulo de alunagem + ANGOSAT-2');
+await say(DIRECTOR_NOME,'Por cima fica a carenagem: uma cobertura que protege a carga do ar enquanto subimos.');await put(pFa);cap('Carenagem');
+await say(DIRECTOR_NOME,`Falta o combustível, que é quase todo o peso da nave. Entre ${FUEL_MIN} e ${FUEL_MAX} toneladas, Kiala.`,4500);hideD();
+await new Promise(r=>{const s=$('fs'),m=$('fm');$('hg').style.display='block';const up=()=>{const v=+s.value;$('fv').textContent=v;const ok=v>=FUEL_MIN&&v<=FUEL_MAX;m.className=ok?'ok':'no';m.textContent=v<FUEL_MIN?'Pouco combustível: a nave não chega à Lua.':v>FUEL_MAX?'Demasiado: a nave fica pesada e sobe mal.':'Perfeito! Margem certa para ir e aterrar.';$('fgo').disabled=!ok};s.oninput=up;up();$('fgo').onclick=()=>{ac();$('hg').style.display='none';r()}})}
+async function lancamento(){step(2);hideD();camFn=()=>cam([26,7,30],[0,14,0]);ck=2;
+await say(DIRECTOR_NOME,'Combustível carregado. Todos os sistemas verdes. Kiala, para dentro da nave!',3600);hideD();K.visible=D.visible=false;
+const bp=f=>{if(AC)tn(AC.currentTime,f,.2,'sine',.25)};for(let i=5;i>0;i--){bp(660);await big(i)}bp(990);
+FL.visible=true;FL.position.set(0,-2.8,0);cap('Ignição!');ck=4;let ig=0;metOn=1;MET=0;const rise=(u)=>.6+420*Math.pow(u,2);
+let sepd=0,fard=0;const dur=17;
+await tween(dur,u=>{const y=rise(u);RK.position.y=y;const km=Math.min(400,Math.pow(u,2)*400*1.35);tel(`Altitude ${nf(km)} km`,`Velocidade ${nf(Math.min(7.8,u*8.6),1)} km/s`);sky(y/330);
+if(u>.1){ck=40;camFn=()=>cam([30,Math.max(8,RK.position.y+6),36],[0,RK.position.y+16,0])}
+if(AC&&!ig){ig=1;nz(AC.currentTime,7,'lowpass',500,.6)}
+if(!sepd&&u>.6){sepd=1;cap('Separação do 1.º estágio');S.attach(pS1);DB.push({o:pS1,v:new THREE.Vector3(1.5,24,-2),w:.5,g:6,life:5});UP.add(FL);FL.position.set(0,12.2,0);}
+if(!fard&&u>.8){fard=1;cap('Carenagem largada');S.attach(pFa);DB.push({o:pFa,v:new THREE.Vector3(6,34,0),w:.8,g:0,life:1.6,m:fairM})}});
+cap('Órbita baixa da Terra: ~400 km');await fade(1);
+}
+async function transito(){step(3);G.visible=false;S.fog=null;SP.visible=true;sky(1);S.attach(UP);UP.scale.setScalar(.6);UP.rotation.set(0,0,-.2);
+const orb=a=>new THREE.Vector3(54*Math.cos(a),54*Math.sin(a),0),B=orb(-.35),A=new THREE.Vector3(MP.x-48,MP.y-8,0),Cc=new THREE.Vector3(150,215,0);
+const bz=u=>new THREE.Vector3().copy(B).multiplyScalar((1-u)*(1-u)).addScaledVector(Cc,2*u*(1-u)).addScaledVector(A,u*u);
+const pose=(p,q)=>{UP.position.copy(p);UP.rotation.z=Math.atan2(q.y-p.y,q.x-p.x)-PI/2};
+UP.children.forEach(c=>{if(c===pS2||c===pLan)c.position.y=-15.4});UP.position.set(0,0,0);// centra o conjunto
+FL.position.set(0,-2.2,0);
+await fade(0);camFn=()=>cam([UP.position.x-6,UP.position.y+9,28],[UP.position.x+6,UP.position.y,0]);ck=2;
+cap('Em órbita. A Terra e Angola lá em baixo.');
+await tween(7,u=>{const a=-1.9+u*1.55,p=orb(a),q=orb(a+.02);pose(p,q);UP.position.copy(p);tel(`Altitude ~400 km`,`Velocidade 7,8 km/s`)});
+await say(DIRECTOR_NOME,'Vês a Terra? Agora acendemos o 2.º estágio: é a injecção translunar, o empurrão que nos manda para a Lua.',4800);hideD();
+cap('Injecção translunar');FL.visible=true;
+await tween(20,u=>{const e=u<.12?u/.12*.02:.02+(u-.12)/.88*.98,p=bz(e),q=bz(Math.min(1,e+.01));pose(p,q);if(u>.12)camFn=()=>cam([UP.position.x-8+Math.sin(tNow*.3)*6,UP.position.y+8,26],[UP.position.x+14,UP.position.y,0]);
+FL.visible=u<.16;const dist=e*384400;tel(`Distância da Terra ${nf(dist)} km`,`Velocidade ${nf(Math.max(1,10.8-e*9.5),1)} km/s · viagem real ≈ 3 dias`);if(u>.15&&u<.17)cap('Motor desligado. Agora é deixar a nave viajar')});
+cap('Estágio 2 largado');S.attach(pS2);DB.push({o:pS2,v:new THREE.Vector3(3,-1.2,1.5),w:.3,g:0,life:7});
+await say(DIRECTOR_NOME,'A Lua está à vista! Vamos travar para ficar presos na sua gravidade.',3600);hideD()}
+/* ===== Robô explorador: reconhece o terreno e avisa a nave ===== */
+const drive=(x,z,s,y)=>{const a=RB.position.clone(),b=new THREE.Vector3(x,y||0,z),d=a.distanceTo(b);if(d>.5)RB.rotation.y=Math.atan2(b.x-a.x,b.z-a.z);let pv=0;return tween(s||Math.min(5,Math.max(1.8,d/12)),u=>{RB.position.lerpVectors(a,b,ease(u));const t=ease(u)*d/.5;RB.userData.wh.forEach(w=>w.rotation.x-=t-pv);pv=t})};
+let ntT;function notify(txt,cls){const n=$('ntf');n.innerHTML='<b>📡 Mensagem para a nave</b>'+txt;n.className='pl '+(cls||'');n.style.display='block';clearTimeout(ntT);ntT=setTimeout(()=>n.style.display='none',5500);
+if(AC){tn(AC.currentTime,cls==='r'?330:880,.12,'sine',.22);tn(AC.currentTime+.14,cls==='r'?260:1170,.16,'sine',.2)}
+if(L.visible&&RB.parent===L){const p=new THREE.Vector3();RB.userData.ant.getWorldPosition(p);PS.visible=true;PS.position.copy(p);tween(1.3,k=>{PS.position.set(p.x,p.y+k*40,p.z);PS.scale.setScalar(1-k*.5)}).then(()=>PS.visible=false)}}
+function lin(i,v){const s=SENS[i],ok=s[2](v);$('sl').insertAdjacentHTML('beforeend',`<div class="r ${ok?'ok':'no'}"><span>${s[0]} <small>${s[4]}</small></span><i>${i===7?(v?'visível':'bloqueada'):nf(v,v%1?1:0)+s[1]} ${ok?'✓':'✗'}</i></div>`);return ok}
+async function analisar(z){const u=RB.userData;$('scan').style.display='block';$('sz').textContent=z.nome;$('sl').innerHTML='';$('sv').className='v';$('sv').textContent='A analisar…';
+u.cone.visible=true;RG.position.set(z.x,(z.y||0)+.1,z.z);const sw=tween(SENS.length*.4+.3,k=>{RG.scale.setScalar(1+k*z.r);RG.material.opacity=.7*(1-k);u.head.rotation.y=Math.sin(k*PI*5)*.9});
+const bad=[];for(let i=0;i<SENS.length;i++){if(!lin(i,z.v[i]))bad.push(SENS[i][3]);if(AC)tn(AC.currentTime,1400+i*80,.05,'square',.05);await wait(.4)}
+await sw;u.cone.visible=false;u.head.rotation.y=0;z.bad=bad;z.ok=!bad.length;z.ring.material.color.set(z.ok?0x5fd38d:0xff7a6a);
+$('sv').className='v '+(z.ok?'ok':'no');$('sv').textContent=z.ok?'Zona segura para pousar':'Não recomendada: '+bad.slice(0,3).join(', ');return bad}
+async function robo(mo,pose,camOrb){const u=RB.userData,V=THREE.Vector3;hideD();
+await say(DIRECTOR_NOME,'Chegámos à Lua! Antes de descer, largamos um pequeno robô. Ele lê o terreno e avisa a nave de onde é seguro pousar.',6200);hideD();
+const p0=UP.position.clone(),dir=MP.clone().sub(p0).normalize(),ps=p0.clone().addScaledVector(dir,3),pe=MP.clone().addScaledVector(dir,-11.6);
+S.add(RB);RB.visible=true;RB.scale.setScalar(1.1);RB.quaternion.setFromUnitVectors(new V(0,1,0),dir.clone().negate());RB.position.copy(ps);u.fl.visible=false;
+camFn=()=>cam([RB.position.x-4,RB.position.y+5,RB.position.z+12],[RB.position.x+1,RB.position.y,RB.position.z]);ck=5;
+cap('Robô explorador largado da nave');await wait(1.4);
+await tween(4.5,k=>{RB.position.lerpVectors(ps,pe,ease(k));u.fl.visible=k>.4;tel('Robô explorador',`Altitude ${nf(100*(1-k))} km`)});
+u.fl.visible=false;await fade(1);
+SP.visible=false;UP.visible=false;LD.visible=false;L.visible=true;$('tel').style.display='none';ZN.forEach(z=>z.lab.visible=true);
+L.add(RB);RB.quaternion.identity();RB.rotation.y=PI*.8;RB.scale.setScalar(1.3);RB.position.set(16,50,26);u.fl.visible=true;
+camFn=()=>cam([RB.position.x+11,Math.max(4,RB.position.y*.5+3),RB.position.z+15],[RB.position.x,RB.position.y*.7+1,RB.position.z]);ck=3;snap();
+await fade(0);cap('Robô a descer na superfície');
+await tween(4.5,k=>{RB.position.y=50*Math.pow(1-k,1.8)});
+u.fl.visible=false;dust.position.set(RB.position.x,.05,RB.position.z);await tween(1.2,k=>{dust.material.opacity=.6*(1-k);dust.scale.setScalar(1+k*8)});dust.position.set(0,.05,0);dust.material.opacity=0;dust.scale.setScalar(1);
+await say('Robô','Aterrei em segurança. Antenas ligadas. Vou analisar três zonas e enviar os resultados à nave.',4800);hideD();
+camFn=()=>cam([RB.position.x+12,8.5,RB.position.z+17],[RB.position.x,(RB.position.y||0)+1.2,RB.position.z]);ck=2.5;
+for(const z of ZN){cap(z.nome);await drive(z.x,z.z,0,z.y);const bad=await analisar(z);
+notify(bad.length?`<em>${z.nome}</em>Não recomendada: ${bad.slice(0,3).join(', ')}.`:`<em>${z.nome}</em>Segura: terreno plano, poucas rochas, solo firme, luz e ligação à Terra.`,bad.length?'r':'g');
+await say('Nave',bad.length?`Mensagem recebida. Zona ${z.id} descartada.`:`Mensagem recebida. Zona ${z.id} confirmada como alvo de alunagem.`,3300);hideD()}
+$('sz').textContent='Resumo da análise';$('sl').innerHTML=ZN.map(z=>`<div class="r ${z.ok?'ok':'no'}"><span>${z.nome}</span><i>${z.ok?'✓ segura':'✗ '+z.bad.length+' problema'+(z.bad.length>1?'s':'')}</i></div>`).join('');$('sv').className='v ok';$('sv').textContent='Alvo da alunagem: Zona C';
+cap('Robô a colocar o farol de alvo');BC.visible=true;BR.visible=true;BC.scale.y=.01;await tween(1.6,k=>BC.scale.y=Math.max(.01,ease(k)));
+notify('<em>Farol colocado na Zona C</em>Alvo da alunagem confirmado. A nave pode descer.','g');
+await say(DIRECTOR_NOME,'O robô analisou tudo: inclinação, rochas, solo, poeira, luz do Sol, temperatura, radiação e ligação à Terra. Vamos pousar na Zona C, junto ao farol!',6800);hideD();
+await drive(-9,6,2);RB.rotation.y=Math.atan2(9,-6);
+await fade(1);$('scan').style.display='none';$('ntf').style.display='none';
+L.visible=false;SP.visible=true;UP.visible=true;ZN.forEach(z=>z.lab.visible=false);camFn=camOrb;ck=2.5;pose(PI+3);snap();await fade(0)}
+async function angosat(){step(4);const mo=a=>new THREE.Vector3(MP.x+22*Math.cos(a),MP.y+22*Math.sin(a)*.3,22*Math.sin(a));FL.visible=false;
+const pose=(a)=>{const p=mo(a),q=mo(a+.02);UP.position.copy(p);UP.rotation.set(0,0,0);UP.lookAt(q);UP.rotateX(PI/2)};
+const camOrb=()=>cam([MP.x+(UP.position.x-MP.x)*1.9+6,MP.y+14,UP.position.z*1.9+10],[UP.position.x,UP.position.y,UP.position.z]);camFn=camOrb;ck=2.5;
+UP.position.copy(mo(PI));cap('Órbita lunar');await tween(5,u=>{pose(PI+u*3);tel('Órbita lunar ~100 km','Velocidade 1,6 km/s')});
+await robo(mo,pose,camOrb);step(5);
+await say(DIRECTOR_NOME,'Hora do ANGOSAT-2! Nota: na vida real ele opera a 35 786 km da Terra. Aqui levamo-lo à Lua só para ilustrar como se larga um satélite.',6200);hideD();
+cap('Satélite largado');const a0=3+PI,sp=UP.position.clone();SAT.updateMatrixWorld();S.attach(SAT);SAT.scale.setScalar(.6);const sp0=SAT.position.clone();let ang=a0;
+const sx=(a)=>new THREE.Vector3(MP.x+30*Math.cos(a),MP.y+8+30*Math.sin(a)*.25,30*Math.sin(a));
+await tween(4,u=>{ang=a0+u*.7;pose(ang);SAT.position.lerpVectors(sp0,sx(ang),ease(u))});
+cap('Painéis solares a abrir');await tween(4,u=>{ang=a0+.7+u*.5;pose(ang);SAT.position.copy(sx(ang+.3));SAT.userData.pn.forEach(p=>p.scale.x=.05+.95*ease(u));SAT.userData.dish.rotation.x=-ease(u)*.8});
+const E=EA.getWorldPosition(new THREE.Vector3()),lg_=new THREE.LineSegments(new THREE.BufferGeometry().setFromPoints([SAT.position.clone(),E]),new THREE.LineDashedMaterial({color:0xf9d200,dashSize:14,gapSize:10,transparent:true,opacity:.7}));lg_.computeLineDistances();SP.add(lg_);
+cap('Antena aponta para a Terra: enlace com Angola');await say(DIRECTOR_NOME,'Sinal recebido em Luanda! O satélite faz o elo entre a Terra e quem está longe. Agora, Kiala: é hora de descer.',5200);hideD();
+UP.userData.keep=1;await tween(2,()=>{})}
+async function alunagem(){step(6);await fade(1);SP.visible=false;UP.visible=false;SAT.visible=false;L.visible=true;sky(1);camFn=()=>cam([10,5,22],[0,LD.position.y*.6+1,0]);ck=2;
+LD.visible=true;LD.position.set(0,70,0);setLegs(LD,0);FL.visible=true;LD.add(FL);FL.userData.s=.55;FL.position.set(0,-2.2,0);snap();
+await fade(0);cap('Descida motorizada, guiada pelo farol do robô');
+await tween(2,u=>{setLegs(LD,ease(u))});
+let tchd=0;await tween(14,u=>{const y=70*Math.pow(1-u,1.8);LD.position.y=y+2.6;const v=1.6*Math.pow(1-u,.8);tel(`Altitude ${nf(y*14)} m`,`Velocidade vertical ${nf(v*2,1)} m/s`);camFn=()=>cam([12,Math.max(3,LD.position.y*.5),20],[0,LD.position.y*.8,0]);if(u>.9&&!tchd){tchd=1;cap('Contacto!')}if(u>.85)dust.material.opacity=Math.min(.7,(u-.85)*6),dust.scale.setScalar(1+(u-.85)*30)});
+FL.visible=false;await tween(1.5,u=>dust.material.opacity=.7*(1-u));await say(DIRECTOR_NOME,'Alunagem confirmada! Kiala, a Terra inteira está contigo.',3800)}
+async function exploracao(){step(7);hideD();$('tel').style.display='none';K.visible=true;D.visible=false;K.userData.helm.position.set(0,2.1,0);K.userData.helm.scale.setScalar(1);K.position.set(2.3,0,1);K.rotation.y=PI*.5;K.userData.dance=null;
+camFn=()=>cam([K.position.x+5,2.6,K.position.z+9],[K.position.x,1.8,K.position.z]);
+await tween(3,u=>{K.position.x=2.3+u*5;K.rotation.y=PI*.5});
+K.rotation.y=0;await say('Kiala','Angola chegou à Lua!',3000);
+fG.position.set(K.position.x+2.2,0,K.position.z+.5);fG.visible=true;fG.scale.y=.01;K.rotation.y=PI*.35;await tween(2,u=>fG.scale.y=Math.max(.01,ease(u)));cap('Bandeira de Angola na Lua');
+K.rotation.y=0;K.userData.wave=2.5;await say(DIRECTOR_NOME,'Parabéns, Kiala! Dança, que a missão está cumprida. Depois podes explorar a Lua à vontade.',5200);hideD();fin=true;$('fin').style.display='block';cap('Carrega em G para dançar');
+const hop=async()=>{while(fin){if(!K.userData.dance){await tween(1.6,u=>K.position.y=Math.sin(u*PI)*1.8)}else{await wait(.5)}}};hop()}
+async function run(){fin=false;try{await intro();await montagem();await lancamento();await transito();await angosat();await alunagem();await exploracao()}catch(e){console.error(e)}}
+$('rs').onclick=()=>location.reload();
+requestAnimationFrame(frame);run();
+</script></body></html>

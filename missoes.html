@@ -1,0 +1,8 @@
+<!doctype html><html lang="pt"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Missões · Luna Calumbo</title><link rel="stylesheet" href="css/main.css"></head><body class="bgimg"><main>
+<div class="top"><h1>Missões</h1><a href="mission.html">Mission Control</a></div>
+<section id="base"><h2>Missão Base</h2><p class="mu" id="bd"></p><div id="mods"></div><div class="out" id="bo" aria-live="polite"></div></section>
+<section id="rover" style="margin-top:34px"><h2>Missão Rover</h2><p class="mu">Setas ou WASD. Apanha os 5 pontos amarelos em 30 s e foge das crateras vermelhas.</p>
+<canvas id="cv" width="480" height="320" style="width:100%;max-width:560px;background:#2a2d34;border:1px solid var(--ln);border-radius:6px;touch-action:none"></canvas>
+<p><button class="btn" id="st">Começar</button> <span id="rs" aria-live="polite"></span></p>
+<div style="display:grid;grid-template-columns:repeat(3,60px);gap:6px;max-width:200px"><span></span><button class="btn alt" data-d="u">▲</button><span></span><button class="btn alt" data-d="l">◀</button><button class="btn alt" data-d="d">▼</button><button class="btn alt" data-d="r">▶</button></div></section>
+<script src="js/guide.js"></script><script src="js/missoes.js"></script></main></body></html>

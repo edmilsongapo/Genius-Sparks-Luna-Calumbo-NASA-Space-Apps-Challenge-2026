@@ -1,0 +1,6 @@
+window.SITES_DATA=[
+{"id":0,"n":"Cume de Shackleton","f":0.80,"L":60,"cold":3,"e":0.5,"dv":0.10,"d":"Muito sol, terreno acidentado, gelo ao lado.","src":"aprox. LRO/LOLA; verificar no Moon Trek"},
+{"id":1,"n":"Crista de Ligação","f":0.88,"L":50,"cold":3,"e":0.4,"dv":0.08,"d":"Quase luz contínua, noites curtas, pouca visão da Terra.","src":"aprox. LRO/LOLA; verificar no Moon Trek"},
+{"id":2,"n":"Maciço Malapert","f":0.65,"L":100,"cold":2,"e":0.95,"dv":0.04,"d":"Terra quase sempre visível, mas noites longas.","src":"aprox. LRO/LOLA; verificar no Moon Trek"},
+{"id":3,"n":"Interior de Shackleton (sombra)","f":0,"L":1,"cold":14,"e":0,"dv":0.15,"d":"Zero sol, −230 °C, gelo de água. Só com reactor.","src":"aprox. LRO/LOLA; verificar no Moon Trek"}
+];

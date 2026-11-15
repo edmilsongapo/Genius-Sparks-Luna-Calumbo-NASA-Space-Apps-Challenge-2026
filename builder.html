@@ -1,0 +1,10 @@
+<!doctype html><html lang="pt"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Spacecraft Builder</title><link rel="stylesheet" href="css/main.css"></head><body><main>
+<div class="top"><h1>Spacecraft Builder</h1><a href="mission.html">Mission Control</a></div>
+<p class="mu">Equação de Tsiolkovsky: Δv = Isp × g × ln(massa inicial ÷ massa final). Os motores são exemplos genéricos, não modelos reais.</p>
+<label for="eng">Motor</label><select id="eng"><option value="350">Hipergólico (Isp 350 s)</option><option value="380">Metano-oxigénio (Isp 380 s)</option><option value="450" selected>Hidrogénio-oxigénio (Isp 450 s)</option></select>
+<label for="fuel">Combustível: <span id="vf"></span> t</label><input id="fuel" type="range" min="10" max="90" value="60">
+<label for="cargo">Carga e habitat: <span id="vc"></span> t</label><input id="cargo" type="range" min="1" max="30" value="8">
+<label for="goal">Destino</label><select id="goal"><option value="3.1">Órbita lunar (≈3,1 km/s a partir da órbita terrestre baixa)</option><option value="4.0">Órbita lunar e regresso parcial (≈4,0 km/s)</option><option value="5.0">Aterragem na Lua (≈5,0 km/s)</option></select>
+<div class="out" id="out" aria-live="polite"></div>
+<p class="mu">Valores de Δv de referência arredondados, para fins educativos.</p>
+<script src="js/builder.js"></script></main></body></html>
